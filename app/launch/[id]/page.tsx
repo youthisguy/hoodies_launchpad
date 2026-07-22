@@ -41,7 +41,7 @@ const STATUS_CFG: Record<
   0: {
     label: "LIVE",
     badge: "text-[#7a9a0a] border-[#CAF50E]/40 bg-[#CAF50E]/10",
-    heading: "Bonding Curve Live",
+    heading: "Bonding Curve",
   },
   1: {
     label: "MIGRATED",
@@ -348,7 +348,6 @@ export default function LaunchDetailPage() {
     { label: "Migration Threshold", value: `${targetHoodie} HOODIE` },
     { label: "Exchange Rate", value: `1 ${launch.ticker} = ${rate} HOODIE` },
     { label: "Network", value: ACTIVE_CHAIN.name },
- 
   ];
 
   return (
@@ -383,7 +382,7 @@ export default function LaunchDetailPage() {
           <div>
             <div className="flex items-center gap-3">
               <h1 className="text-2xl font-black text-zinc-900 tracking-tight">
-                {launch.ticker} Fairlaunch
+                {launch.ticker}
               </h1>
               {state !== null && !chainLoading && (
                 <span
@@ -549,8 +548,7 @@ export default function LaunchDetailPage() {
                 >
                   {txLoading ? (
                     <>
-                      <RotateCcw size={15} className="animate-spin" />{" "}
-                      Approving
+                      <RotateCcw size={15} className="animate-spin" /> Approving
                     </>
                   ) : parseFloat(buyAmount || "0") > parseFloat(myHoodie) ? (
                     <>
@@ -613,8 +611,7 @@ export default function LaunchDetailPage() {
                 >
                   {txLoading ? (
                     <>
-                      <RotateCcw size={15} className="animate-spin" />{" "}
-                      Approving
+                      <RotateCcw size={15} className="animate-spin" /> Approving
                     </>
                   ) : (
                     <>Sell {launch.ticker}</>
@@ -638,7 +635,7 @@ export default function LaunchDetailPage() {
               </p>
               <div>
                 <TimelineStep
-                  title="Bonding curve live"
+                  title="Bonding curve"
                   desc="Buy/sell against the curve"
                   active={state === 0}
                   done={(state ?? -1) >= 0}

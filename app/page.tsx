@@ -97,9 +97,9 @@ export default function Home() {
             "repeating-linear-gradient(45deg, rgba(46,43,50,0.06) 0px, rgba(46,43,50,0.06) 1px, transparent 1px, transparent 12px)",
         }}
       >
-        <section className="relative z-10 max-w-5xl mx-auto px-4 pt-16 pb-20 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-5">
-            <div className="shrink-0 h-20 w-20 sm:h-24 sm:w-24 rounded-full overflow-hidden border-2 border-zinc-900 shadow-[3px_3px_0_0_rgba(24,24,27,1)] bg-white">
+        <section className="relative z-10 max-w-5xl mx-auto px-4 pt-8 pb-10 sm:pt-16 sm:pb-20 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-4 sm:gap-5">
+            <div className="shrink-0 h-14 w-14 sm:h-24 sm:w-24 rounded-full overflow-hidden border-2 border-zinc-900 shadow-[3px_3px_0_0_rgba(24,24,27,1)] bg-white">
               <Image
                 src="/mascotgreen.png"
                 alt="Hoodie mascot"
@@ -111,12 +111,12 @@ export default function Home() {
             </div>
 
             <div>
-              <h1 className="text-4xl font-black text-zinc-900 tracking-tight">
+              <h1 className="text-2xl sm:text-4xl font-black text-zinc-900 tracking-tight leading-tight">
                 Hoodie <span className="text-[#7a9a0a]">Launchpad</span>
               </h1>
-              <p className="text-zinc-600 mt-2 text-sm">
+              <p className="text-zinc-600 mt-1.5 sm:mt-2 text-sm sm:text-sm leading-snug">
                 Launch, Discover and Participate in new token launches on Hoodie
-                Launchpad Launcher.
+                Token Launcher Launcher.
               </p>
             </div>
           </div>
@@ -124,9 +124,9 @@ export default function Home() {
           <Link
             href="/launch/new"
             className="px-4 py-2.5 md:px-5 md:py-3 rounded-xl bg-[#CAF50E] hover:bg-[#B8E00D]
-              border-2 border-zinc-900 shadow-[3px_3px_0_0_rgba(24,24,27,1)]
-              text-zinc-900 font-bold text-xs md:text-sm tracking-wider
-              transition-all flex items-center gap-1.5 md:gap-2 whitespace-nowrap w-fit"
+      border-2 border-zinc-900 shadow-[3px_3px_0_0_rgba(24,24,27,1)]
+      text-zinc-900 font-bold text-xs md:text-sm tracking-wider
+      transition-all flex items-center justify-center gap-1.5 md:gap-2 whitespace-nowrap w-full sm:w-fit"
           >
             <PlusCircle size={13} className="md:hidden" />
             <PlusCircle size={15} className="hidden md:block" />
