@@ -247,7 +247,7 @@ export default function LaunchDetailPage() {
     )
       return;
     setTxLoading(true);
-    setTxStatus({ type: "pending", msg: "Broadcasting buy…" });
+    setTxStatus({ type: "pending", msg: "Approve buy" });
     try {
       const amount = parseEther(buyAmount);
       await ensureAllowance(hoodieAddr, amount);
@@ -274,7 +274,7 @@ export default function LaunchDetailPage() {
   const handleSell = async () => {
     if (!sellAmount || parseFloat(sellAmount) <= 0 || !connectedAddress) return;
     setTxLoading(true);
-    setTxStatus({ type: "pending", msg: "Broadcasting sell…" });
+    setTxStatus({ type: "pending", msg: "Processing" });
     try {
       const amount = parseEther(sellAmount);
       await ensureAllowance(tokenAddr, amount);
@@ -348,7 +348,7 @@ export default function LaunchDetailPage() {
     { label: "Migration Threshold", value: `${targetHoodie} HOODIE` },
     { label: "Exchange Rate", value: `1 ${launch.ticker} = ${rate} HOODIE` },
     { label: "Network", value: ACTIVE_CHAIN.name },
-    { label: "Liquidity %", value: `${launch.liquidity}%` },
+ 
   ];
 
   return (
@@ -550,7 +550,7 @@ export default function LaunchDetailPage() {
                   {txLoading ? (
                     <>
                       <RotateCcw size={15} className="animate-spin" />{" "}
-                      Broadcasting…
+                      Approving
                     </>
                   ) : parseFloat(buyAmount || "0") > parseFloat(myHoodie) ? (
                     <>
@@ -614,7 +614,7 @@ export default function LaunchDetailPage() {
                   {txLoading ? (
                     <>
                       <RotateCcw size={15} className="animate-spin" />{" "}
-                      Broadcasting…
+                      Approving
                     </>
                   ) : (
                     <>Sell {launch.ticker}</>

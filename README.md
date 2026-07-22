@@ -1,8 +1,6 @@
 # HOODIE Launcher Launcher
 
-A token launcher *launcher* on Robinhood Chain. Anyone can spin up their own independent, reusable token launchpad — and every token launched through any of them, by anyone, is permanently paired with **[$HOODIE](https://x.com/search?q=$HOODIE)**. Not as a UI default. As the only code path that exists.
-
-Built for the [Robinhood Chain bounty](https://x.com/search?q=%22token%20launcher%20launcher%22): *"makes launching a token launcher as easy as launching a token."*
+A token launcher *launcher* on Robinhood Chain. Anyone can spin up their own independent, reusable token launchpad — and every token launched through any of them, by anyone, is permanently paired with $HOODIE. Not as a UI default. As the only code path that exists.
 
 ---
 
