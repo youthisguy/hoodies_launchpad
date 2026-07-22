@@ -42,7 +42,7 @@ export default function LaunchGrid() {
 
   if (loading) {
     return (
-      <div className="max-w-5xl mx-auto px-4 pb-24 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="max-w-5xl mx-auto px-4 pb-24 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
         {Array.from({ length: 6 }).map((_, i) => (
           <div key={i} className="h-64 rounded-2xl bg-zinc-900/30 border border-zinc-800 animate-pulse" />
         ))}

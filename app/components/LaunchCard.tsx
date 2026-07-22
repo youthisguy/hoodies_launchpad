@@ -40,12 +40,12 @@ const STATUS: Record<
 > = {
   0: {
     label: "LIVE",
-    color: "text-violet-400 border-violet-500/30 bg-violet-500/10",
+    color: "text-[#CAF50E] border-[#CAF50E]/30 bg-[#CAF50E]/10",
     icon: <Zap size={10} />,
   },
   1: {
     label: "MIGRATED",
-    color: "text-emerald-400 border-emerald-500/30 bg-emerald-500/10",
+    color: "text-black border-[#CAF50E] bg-[#CAF50E]",
     icon: <CheckCircle2 size={10} />,
   },
 };
@@ -93,7 +93,11 @@ export default function LaunchCard({
   const [chain, setChain] = useState<ChainState | null>(null);
   const [loading, setLoading] = useState(true);
   const [price, setPrice] = useState<bigint>(0n);
-  const remaining = chain ? formatHoodie(chain.target > chain.funded ? chain.target - chain.funded : 0n) : "—";
+  const remaining = chain
+    ? formatHoodie(
+        chain.target > chain.funded ? chain.target - chain.funded : 0n
+      )
+    : "—";
   const launchpadAddr = launch.launchpadId as Address;
   const progress = chain ? pct(chain.funded, chain.target) : 0;
   const fundedHoodie = chain ? formatHoodie(chain.funded) : "—";
@@ -160,19 +164,21 @@ export default function LaunchCard({
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="border border-zinc-800 rounded-2xl p-5 bg-zinc-900/30 backdrop-blur
-                 hover:border-violet-500/30 transition-all duration-200 space-y-4
-                 flex flex-col"
+      className="border-2 border-zinc-900 rounded-2xl p-5 bg-[#FBF8EE]
+             shadow-[4px_4px_0_0_rgba(24,24,27,1)]
+             hover:shadow-[6px_6px_0_0_rgba(24,24,27,1)]
+             transition-all duration-200 space-y-4
+             flex flex-col"
     >
       {/* ── Row 1: icon + name + status badge ── */}
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3 min-w-0">
           <TokenIcon icon={launch.icon} ticker={launch.ticker} />
           <div className="min-w-0">
-            <p className="font-black text-white text-base tracking-wide truncate">
+            <p className="font-black text-zinc-900 text-base tracking-wide truncate">
               {launch.ticker}
             </p>
-            <p className="text-[10px] text-zinc-500 truncate">{launch.name}</p>
+            <p className="text-[10px] text-zinc-600 truncate">{launch.name}</p>
           </div>
         </div>
 
@@ -185,27 +191,27 @@ export default function LaunchCard({
             {status.label}
           </span>
         ) : (
-          <span className="shrink-0 h-6 w-16 rounded-full bg-zinc-800 animate-pulse" />
+          <span className="shrink-0 h-6 w-16 rounded-full bg-zinc-200 animate-pulse" />
         )}
       </div>
 
       {/* ── Row 2: exchange rate ── */}
-      <div className="text-[11px] text-zinc-500">
+      <div className="text-[11px] text-zinc-600">
         1 {launch.ticker} ={" "}
-        <span className="text-zinc-300 font-bold">{rate} HOODIE</span>
+        <span className="text-zinc-900 font-bold">{rate} HOODIE</span>
       </div>
 
-      {/* ── Row 3: soft cap ── */}
+      {/* ── Row 3: graduation % ── */}
       <div>
         {loading ? (
-          <div className="h-7 w-28 rounded bg-zinc-800 animate-pulse" />
+          <div className="h-7 w-28 rounded bg-zinc-200 animate-pulse" />
         ) : (
           <>
-            <p className="text-violet-400 text-xl font-black tabular-nums">
+            <p className="text-[#7a9a0a] text-xl font-black tabular-nums">
               {progress.toFixed(1)}
               <span className="text-sm font-bold text-zinc-500">%</span>
             </p>
-            <p className="text-[10px] text-zinc-600 uppercase tracking-widest mt-0.5">
+            <p className="text-[10px] text-zinc-500 uppercase tracking-widest mt-0.5">
               Graduation
             </p>
           </>
@@ -214,17 +220,17 @@ export default function LaunchCard({
 
       {/* ── Row 4: liquidity + offered ── */}
       <div className="grid grid-cols-2 gap-2 text-[11px]">
-        <div className="flex items-center gap-1.5 text-zinc-500">
-          <Droplets size={11} className="text-violet-400/60" />
+        <div className="flex items-center gap-1.5 text-zinc-600">
+          <Droplets size={11} className="text-[#7a9a0a]" />
           <span>Liquidity:</span>
-          <span className="text-zinc-300 font-bold ml-auto">
+          <span className="text-zinc-900 font-bold ml-auto">
             {launch.liquidity}%
           </span>
         </div>
-        <div className="flex items-center gap-1.5 text-zinc-500">
-          <Package size={11} className="text-violet-400/60" />
+        <div className="flex items-center gap-1.5 text-zinc-600">
+          <Package size={11} className="text-[#7a9a0a]" />
           <span>Offered:</span>
-          <span className="text-zinc-300 font-bold ml-auto truncate">
+          <span className="text-zinc-900 font-bold ml-auto truncate">
             {launch.offered}
           </span>
         </div>
@@ -232,23 +238,23 @@ export default function LaunchCard({
 
       {/* ── Row 5: progress bar ── */}
       <div className="space-y-1.5">
-        <div className="h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+        <div className="h-1.5 bg-zinc-200 rounded-full overflow-hidden border border-zinc-900/10">
           {loading ? (
-            <div className="h-full w-1/3 rounded-full bg-zinc-700 animate-pulse" />
+            <div className="h-full w-1/3 rounded-full bg-zinc-300 animate-pulse" />
           ) : (
             <motion.div
-              className="h-full rounded-full bg-linear-to-r from-violet-700 to-violet-400"
+              className="h-full rounded-full bg-linear-to-r from-[#7a9a0a] to-[#CAF50E]"
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             />
           )}
         </div>
-        <div className="flex justify-between text-[10px] text-zinc-600 tabular-nums">
+        <div className="flex justify-between text-[10px] text-zinc-500 tabular-nums">
           {loading ? (
             <>
-              <span className="w-10 h-3 rounded bg-zinc-800 animate-pulse" />
-              <span className="w-20 h-3 rounded bg-zinc-800 animate-pulse" />
+              <span className="w-10 h-3 rounded bg-zinc-200 animate-pulse" />
+              <span className="w-20 h-3 rounded bg-zinc-200 animate-pulse" />
             </>
           ) : (
             <>
@@ -263,30 +269,24 @@ export default function LaunchCard({
 
       {/* ── Row 6: action row ── */}
       <div className="flex gap-2 pt-1 mt-auto">
-        {/* "Ended" pill — shown when not live */}
+        {/* Live/Migrated pill */}
         <div
-          className={`flex-1 py-2.5 rounded-xl text-center text-xs font-bold tracking-wider transition-colors
-            ${
-              isEnded
-                ? "bg-zinc-800/50 text-zinc-500 border border-zinc-700/50"
-                : isLive
-                ? "bg-violet-500/10 text-violet-400 border border-violet-500/20"
-                : "bg-zinc-500/10 text-zinc-400 border border-zinc-500/20"
-            }`}
+          className={`flex-1 py-2.5 rounded-xl text-center text-xs font-bold tracking-wider border-2 border-zinc-900 transition-colors
+        ${
+          chain?.state === 1
+            ? "bg-[#CAF50E]/20 text-[#5a7a0a]"
+            : "bg-[#CAF50E]/20 text-[#5a7a0a]"
+        }`}
         >
-          {chain?.state === 0
-            ? "LIVE"
-            : chain?.state === 1
-            ? "SUCCESS"
-            : "ENDED"}
+          {chain?.state === 1 ? "MIGRATED" : "LIVE"}
         </div>
 
         {/* View button */}
         <Link
           href={`/launch/${launch.id}`}
           className="flex-1 py-2.5 rounded-xl text-center text-xs font-black tracking-wider
-                     bg-white hover:bg-white/55 text-black transition-colors
-                     flex items-center justify-center gap-1.5"
+                 bg-[#CAF50E] hover:bg-[#B8E00D] text-zinc-900 border-2 border-zinc-900
+                 transition-colors flex items-center justify-center gap-1.5"
         >
           View <ExternalLink size={11} />
         </Link>

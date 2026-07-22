@@ -34,8 +34,10 @@ function fmtAddr(addr: string) {
 
 const explorerBase = ACTIVE_CHAIN.blockExplorers?.default.url;
 
- 
-const STATUS_CFG: Record<number, { label: string; badge: string; heading: string }> = {
+const STATUS_CFG: Record<
+  number,
+  { label: string; badge: string; heading: string }
+> = {
   0: {
     label: "LIVE",
     badge: "text-violet-400/50 border-violet-500/30 bg-violet-500/10",
@@ -74,20 +76,37 @@ function SkeletonRow() {
 }
 
 function TimelineStep({
-  title, desc, active, done,
-}: { title: string; desc: string; active?: boolean; done?: boolean }) {
+  title,
+  desc,
+  active,
+  done,
+}: {
+  title: string;
+  desc: string;
+  active?: boolean;
+  done?: boolean;
+}) {
   return (
     <div className="flex gap-3">
       <div className="flex flex-col items-center">
-        <div className={`w-3 h-3 rounded-full mt-0.5 shrink-0 border-2 transition-colors
-          ${done ? "bg-violet-500 border-violet-500"
-            : active ? "bg-violet-400 border-violet-400 shadow-[0_0_8px_rgba(139,92,246,0.6)]"
-            : "bg-zinc-800 border-zinc-700"}`}
+        <div
+          className={`w-3 h-3 rounded-full mt-0.5 shrink-0 border-2 transition-colors
+          ${
+            done
+              ? "bg-violet-500 border-violet-500"
+              : active
+              ? "bg-violet-400 border-violet-400 shadow-[0_0_8px_rgba(139,92,246,0.6)]"
+              : "bg-zinc-800 border-zinc-700"
+          }`}
         />
         <div className="w-px flex-1 bg-zinc-800 mt-1" />
       </div>
       <div className="pb-5">
-        <p className={`text-xs font-bold ${active ? "text-white" : done ? "text-zinc-400" : "text-zinc-600"}`}>
+        <p
+          className={`text-xs font-bold ${
+            active ? "text-white" : done ? "text-zinc-400" : "text-zinc-600"
+          }`}
+        >
           {title}
         </p>
         <p className="text-[11px] text-zinc-600 mt-0.5">{desc}</p>
@@ -133,12 +152,29 @@ export default function LaunchDetailPage() {
     try {
       setChainLoading(true);
 
-      const [isMigrated, realHoodie, threshold, hoodieTokenAddr] = await Promise.all([
-        publicClient.readContract({ address: launchpadAddr, abi: LAUNCHPAD_ABI, functionName: "migrated" }),
-        publicClient.readContract({ address: launchpadAddr, abi: LAUNCHPAD_ABI, functionName: "realHoodieReserves" }),
-        publicClient.readContract({ address: launchpadAddr, abi: LAUNCHPAD_ABI, functionName: "migrationThreshold" }),
-        publicClient.readContract({ address: launchpadAddr, abi: LAUNCHPAD_ABI, functionName: "hoodie" }),
-      ]);
+      const [isMigrated, realHoodie, threshold, hoodieTokenAddr] =
+        await Promise.all([
+          publicClient.readContract({
+            address: launchpadAddr,
+            abi: LAUNCHPAD_ABI,
+            functionName: "migrated",
+          }),
+          publicClient.readContract({
+            address: launchpadAddr,
+            abi: LAUNCHPAD_ABI,
+            functionName: "realHoodieReserves",
+          }),
+          publicClient.readContract({
+            address: launchpadAddr,
+            abi: LAUNCHPAD_ABI,
+            functionName: "migrationThreshold",
+          }),
+          publicClient.readContract({
+            address: launchpadAddr,
+            abi: LAUNCHPAD_ABI,
+            functionName: "hoodie",
+          }),
+        ]);
 
       setState(isMigrated ? 1 : 0);
       setFunded(BigInt(realHoodie as bigint));
@@ -148,10 +184,16 @@ export default function LaunchDetailPage() {
       if (connectedAddress) {
         const [rawTokenBal, rawHoodieBal] = await Promise.all([
           publicClient.readContract({
-            address: tokenAddr, abi: ERC20_ABI, functionName: "balanceOf", args: [connectedAddress],
+            address: tokenAddr,
+            abi: ERC20_ABI,
+            functionName: "balanceOf",
+            args: [connectedAddress],
           }),
           publicClient.readContract({
-            address: hoodieTokenAddr as Address, abi: ERC20_ABI, functionName: "balanceOf", args: [connectedAddress],
+            address: hoodieTokenAddr as Address,
+            abi: ERC20_ABI,
+            functionName: "balanceOf",
+            args: [connectedAddress],
           }),
         ]);
         setTokenBalance(BigInt(rawTokenBal as bigint));
@@ -164,7 +206,9 @@ export default function LaunchDetailPage() {
     }
   }, [connectedAddress, launchpadAddr, tokenAddr, publicClient]);
 
-  useEffect(() => { readChain(); }, [readChain]);
+  useEffect(() => {
+    readChain();
+  }, [readChain]);
 
   useEffect(() => {
     if (txStatus && txStatus.type !== "pending") {
@@ -174,19 +218,31 @@ export default function LaunchDetailPage() {
   }, [txStatus]);
 
   async function ensureAllowance(erc20: Address, amount: bigint) {
-    const allowance = await publicClient!.readContract({
-      address: erc20, abi: ERC20_ABI, functionName: "allowance", args: [connectedAddress!, launchpadAddr],
-    }) as bigint;
+    const allowance = (await publicClient!.readContract({
+      address: erc20,
+      abi: ERC20_ABI,
+      functionName: "allowance",
+      args: [connectedAddress!, launchpadAddr],
+    })) as bigint;
     if (allowance < amount) {
       const approveHash = await writeContractAsync({
-        address: erc20, abi: ERC20_ABI, functionName: "approve", args: [launchpadAddr, amount],
+        address: erc20,
+        abi: ERC20_ABI,
+        functionName: "approve",
+        args: [launchpadAddr, amount],
       });
       await publicClient!.waitForTransactionReceipt({ hash: approveHash });
     }
   }
 
   const handleBuy = async () => {
-    if (!buyAmount || parseFloat(buyAmount) <= 0 || !hoodieAddr || !connectedAddress) return;
+    if (
+      !buyAmount ||
+      parseFloat(buyAmount) <= 0 ||
+      !hoodieAddr ||
+      !connectedAddress
+    )
+      return;
     setTxLoading(true);
     setTxStatus({ type: "pending", msg: "Broadcasting buy…" });
     try {
@@ -203,7 +259,10 @@ export default function LaunchDetailPage() {
       setBuyAmount("");
       await readChain();
     } catch (err: any) {
-      setTxStatus({ type: "error", msg: err.shortMessage || err.message || "Buy failed" });
+      setTxStatus({
+        type: "error",
+        msg: err.shortMessage || err.message || "Buy failed",
+      });
     } finally {
       setTxLoading(false);
     }
@@ -227,7 +286,10 @@ export default function LaunchDetailPage() {
       setSellAmount("");
       await readChain();
     } catch (err: any) {
-      setTxStatus({ type: "error", msg: err.shortMessage || err.message || "Sell failed" });
+      setTxStatus({
+        type: "error",
+        msg: err.shortMessage || err.message || "Sell failed",
+      });
     } finally {
       setTxLoading(false);
     }
@@ -240,22 +302,36 @@ export default function LaunchDetailPage() {
   const myHoodie = fmtHoodie(hoodieBalance);
 
   const offeredNum = parseFloat(launch.offered.split(" ")[0].replace(/,/g, ""));
-  const rate = target > 0n && offeredNum > 0
-    ? (Number(formatEther(target)) / offeredNum).toFixed(6)
-    : "—";
+  const rate =
+    target > 0n && offeredNum > 0
+      ? (Number(formatEther(target)) / offeredNum).toFixed(6)
+      : "—";
 
   const canBuy = state === 0 && isConnected;
   const canSell = state === 0 && tokenBalance > 0n && isConnected;
 
   const cfg = STATUS_CFG[state ?? 0];
 
-  const hue = launch.ticker.split("").reduce((acc: any, c: string) => acc + c.charCodeAt(0), 0) % 360;
+  const hue =
+    launch.ticker
+      .split("")
+      .reduce((acc: any, c: string) => acc + c.charCodeAt(0), 0) % 360;
 
   const metaRows = [
-    { label: "Launchpad Address", value: launch.launchpadId, copyable: true, link: `${explorerBase}/address/${launch.launchpadId}` },
+    {
+      label: "Launchpad Address",
+      value: launch.launchpadId,
+      copyable: true,
+      link: `${explorerBase}/address/${launch.launchpadId}`,
+    },
     { label: "Token Name", value: launch.name },
     { label: "Token Symbol", value: launch.ticker },
-    { label: "Token Address", value: launch.tokenId, copyable: true, link: `${explorerBase}/address/${launch.tokenId}` },
+    {
+      label: "Token Address",
+      value: launch.tokenId,
+      copyable: true,
+      link: `${explorerBase}/address/${launch.tokenId}`,
+    },
     { label: "Tokens For Sale", value: launch.offered },
     { label: "Tokens For Liquidity", value: `${launch.liquidity}% of raise` },
     { label: "Migration Threshold", value: `${targetHoodie} HOODIE` },
@@ -265,27 +341,43 @@ export default function LaunchDetailPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#202025] text-zinc-200 font-mono">
+    <div className="min-h-screen bg-[#F1EBDC] text-zinc-200 font-mono">
       <div className="relative max-w-6xl mx-auto px-4 py-8 pb-28">
-        <Link href="/" className="inline-flex items-center gap-2 text-zinc-500 hover:text-violet-400 text-xs tracking-wider transition-colors mb-8 group">
-          <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-zinc-500 hover:text-violet-400 text-xs tracking-wider transition-colors mb-8 group"
+        >
+          <ArrowLeft
+            size={14}
+            className="group-hover:-translate-x-0.5 transition-transform"
+          />
           All Launches
         </Link>
 
         <div className="flex items-center gap-4 mb-8">
           {launch.icon ? (
-            <img src={launch.icon} alt={launch.ticker} className="w-14 h-14 rounded-full border border-zinc-700 object-cover" />
+            <img
+              src={launch.icon}
+              alt={launch.ticker}
+              className="w-14 h-14 rounded-full border border-zinc-700 object-cover"
+            />
           ) : (
-            <div className="w-14 h-14 rounded-full flex items-center justify-center text-sm font-black text-white border border-zinc-700 shrink-0"
-              style={{ background: `hsl(${hue},55%,25%)` }}>
+            <div
+              className="w-14 h-14 rounded-full flex items-center justify-center text-sm font-black text-white border border-zinc-700 shrink-0"
+              style={{ background: `hsl(${hue},55%,25%)` }}
+            >
               {launch.ticker.slice(0, 2)}
             </div>
           )}
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-black text-white tracking-tight">{launch.ticker} Fairlaunch</h1>
+              <h1 className="text-2xl font-black text-white tracking-tight">
+                {launch.ticker} Fairlaunch
+              </h1>
               {state !== null && !chainLoading && (
-                <span className={`text-[10px] font-bold px-3 py-1 rounded-full border tracking-widest ${cfg.badge}`}>
+                <span
+                  className={`text-[10px] font-bold px-3 py-1 rounded-full border tracking-widest ${cfg.badge}`}
+                >
                   {cfg.label}
                 </span>
               )}
@@ -298,28 +390,47 @@ export default function LaunchDetailPage() {
           {/* LEFT: metadata */}
           <div className="border border-zinc-800 rounded-2xl overflow-hidden bg-zinc-900/20">
             <div className="px-6 py-4 border-b border-zinc-800">
-              <h2 className="text-[11px] font-bold text-zinc-500 uppercase tracking-widest">Token Info</h2>
+              <h2 className="text-[11px] font-bold text-zinc-500 uppercase tracking-widest">
+                Token Info
+              </h2>
             </div>
             <div className="divide-y divide-zinc-800/50">
               {chainLoading
-                ? Array.from({ length: 8 }).map((_, i) => <div key={i} className="px-6"><SkeletonRow /></div>)
-                : metaRows.map(({ label, value, copyable, link }) => (
-                  <div key={label} className="flex items-center justify-between px-6 py-3 hover:bg-zinc-800/20 transition-colors gap-4">
-                    <span className="text-xs text-zinc-500 shrink-0">{label}</span>
-                    <div className="flex items-center gap-1 text-right">
-                      {link ? (
-                        <a href={link} target="_blank" rel="noopener noreferrer"
-                          className="text-xs text-violet-400 hover:text-violet-300 font-mono transition-colors flex items-center gap-1">
-                          {value.length > 20 ? fmtAddr(value as string) : value}
-                          <ExternalLink size={10} />
-                        </a>
-                      ) : (
-                        <span className="text-xs text-zinc-300 font-mono">{value}</span>
-                      )}
-                      {copyable && <CopyBtn value={value as string} />}
+                ? Array.from({ length: 8 }).map((_, i) => (
+                    <div key={i} className="px-6">
+                      <SkeletonRow />
                     </div>
-                  </div>
-                ))}
+                  ))
+                : metaRows.map(({ label, value, copyable, link }) => (
+                    <div
+                      key={label}
+                      className="flex items-center justify-between px-6 py-3 hover:bg-zinc-800/20 transition-colors gap-4"
+                    >
+                      <span className="text-xs text-zinc-500 shrink-0">
+                        {label}
+                      </span>
+                      <div className="flex items-center gap-1 text-right">
+                        {link ? (
+                          <a
+                            href={link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs text-violet-400 hover:text-violet-300 font-mono transition-colors flex items-center gap-1"
+                          >
+                            {value.length > 20
+                              ? fmtAddr(value as string)
+                              : value}
+                            <ExternalLink size={10} />
+                          </a>
+                        ) : (
+                          <span className="text-xs text-zinc-300 font-mono">
+                            {value}
+                          </span>
+                        )}
+                        {copyable && <CopyBtn value={value as string} />}
+                      </div>
+                    </div>
+                  ))}
             </div>
           </div>
 
@@ -327,14 +438,22 @@ export default function LaunchDetailPage() {
           <div className="space-y-4">
             <div className="border border-zinc-800 rounded-2xl p-5 bg-zinc-900/20 space-y-4">
               <h2 className="text-sm font-black text-white">
-                {chainLoading ? <div className="h-4 w-24 rounded bg-zinc-800 animate-pulse" /> : cfg.heading}
+                {chainLoading ? (
+                  <div className="h-4 w-24 rounded bg-zinc-800 animate-pulse" />
+                ) : (
+                  cfg.heading
+                )}
               </h2>
               {chainLoading ? (
                 <div className="h-8 w-40 rounded bg-zinc-800 animate-pulse" />
               ) : (
                 <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-black text-white tabular-nums">{fundedHoodie}</span>
-                  <span className="text-zinc-500 text-sm">/ {targetHoodie} HOODIE</span>
+                  <span className="text-3xl font-black text-white tabular-nums">
+                    {fundedHoodie}
+                  </span>
+                  <span className="text-zinc-500 text-sm">
+                    / {targetHoodie} HOODIE
+                  </span>
                 </div>
               )}
               <div className="space-y-1.5">
@@ -342,18 +461,30 @@ export default function LaunchDetailPage() {
                   {chainLoading ? (
                     <div className="h-full w-1/4 bg-zinc-700 animate-pulse rounded-full" />
                   ) : (
-                    <motion.div className="h-full rounded-full bg-gradient-to-r from-violet-700 to-violet-400"
-                      initial={{ width: 0 }} animate={{ width: `${progress}%` }} transition={{ duration: 0.8, ease: "easeOut" }} />
+                    <motion.div
+                      className="h-full rounded-full bg-gradient-to-r from-violet-700 to-violet-400"
+                      initial={{ width: 0 }}
+                      animate={{ width: `${progress}%` }}
+                      transition={{ duration: 0.8, ease: "easeOut" }}
+                    />
                   )}
                 </div>
-                <p className="text-[11px] text-violet-400 font-bold">{chainLoading ? "" : `${progress.toFixed(2)}%`}</p>
+                <p className="text-[11px] text-violet-400 font-bold">
+                  {chainLoading ? "" : `${progress.toFixed(2)}%`}
+                </p>
               </div>
               {isConnected && (
                 <div className="pt-2 border-t border-zinc-800/60 space-y-1">
-                  <p className="text-[10px] text-zinc-600 uppercase tracking-widest">Your holdings</p>
+                  <p className="text-[10px] text-zinc-600 uppercase tracking-widest">
+                    Your holdings
+                  </p>
                   <div className="flex items-center justify-between bg-zinc-800/40 rounded-xl px-4 py-2.5">
-                    <span className="text-sm font-bold text-white">{myTokens} {launch.ticker}</span>
-                    <span className="text-xs text-zinc-500">{myHoodie} HOODIE</span>
+                    <span className="text-sm font-bold text-white">
+                      {myTokens} {launch.ticker}
+                    </span>
+                    <span className="text-xs text-zinc-500">
+                      {myHoodie} HOODIE
+                    </span>
                   </div>
                 </div>
               )}
@@ -361,88 +492,177 @@ export default function LaunchDetailPage() {
 
             {/* Buy */}
             {canBuy && (
-              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-                className="border border-zinc-800 rounded-2xl p-5 space-y-4 bg-zinc-900/20">
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="border border-zinc-800 rounded-2xl p-5 space-y-4 bg-zinc-900/20"
+              >
                 <div className="flex items-center justify-between">
                   <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest flex items-center gap-1.5">
                     <Zap size={13} className="text-violet-400" /> Buy
                   </p>
                   <span className="text-[10px] text-zinc-600">
-                    Balance: <span className="text-zinc-400">{myHoodie} HOODIE</span>
+                    Balance:{" "}
+                    <span className="text-zinc-400">{myHoodie} HOODIE</span>
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <div className="relative flex-1">
-                    <input type="number" placeholder="0.00" value={buyAmount} onChange={(e) => setBuyAmount(e.target.value)}
-                      className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3 text-lg font-bold outline-none focus:border-violet-500/50 transition-colors pr-14" />
-                    <button onClick={() => setBuyAmount(myHoodie)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-bold text-violet-500 hover:text-violet-400 tracking-wider">
+                    <input
+                      type="number"
+                      placeholder="0.00"
+                      value={buyAmount}
+                      onChange={(e) => setBuyAmount(e.target.value)}
+                      className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3 text-lg font-bold outline-none focus:border-violet-500/50 transition-colors pr-14"
+                    />
+                    <button
+                      onClick={() => setBuyAmount(myHoodie)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-bold text-violet-500 hover:text-violet-400 tracking-wider"
+                    >
                       MAX
                     </button>
                   </div>
-                  <span className="flex items-center text-zinc-500 text-sm font-bold px-1">HOODIE</span>
+                  <span className="flex items-center text-zinc-500 text-sm font-bold px-1">
+                    HOODIE
+                  </span>
                 </div>
-                <button onClick={handleBuy}
-                  disabled={txLoading || !buyAmount || parseFloat(buyAmount) <= 0 || parseFloat(buyAmount) > parseFloat(myHoodie)}
-                  className="w-full py-3.5 rounded-xl bg-[#524981] hover:bg-violet-500 text-white font-black tracking-widest uppercase text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.98] flex items-center justify-center gap-2">
-                  {txLoading ? (<><RotateCcw size={15} className="animate-spin" /> Broadcasting…</>)
-                    : parseFloat(buyAmount || "0") > parseFloat(myHoodie) ? (<><AlertCircle size={15} /> Insufficient Balance</>)
-                    : (<>Buy {launch.ticker}</>)}
+                <button
+                  onClick={handleBuy}
+                  disabled={
+                    txLoading ||
+                    !buyAmount ||
+                    parseFloat(buyAmount) <= 0 ||
+                    parseFloat(buyAmount) > parseFloat(myHoodie)
+                  }
+                  className="w-full py-3.5 rounded-xl bg-[#524981] hover:bg-violet-500 text-white font-black tracking-widest uppercase text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.98] flex items-center justify-center gap-2"
+                >
+                  {txLoading ? (
+                    <>
+                      <RotateCcw size={15} className="animate-spin" />{" "}
+                      Broadcasting…
+                    </>
+                  ) : parseFloat(buyAmount || "0") > parseFloat(myHoodie) ? (
+                    <>
+                      <AlertCircle size={15} /> Insufficient Balance
+                    </>
+                  ) : (
+                    <>Buy {launch.ticker}</>
+                  )}
                 </button>
               </motion.div>
             )}
 
             {/* Sell */}
             {canSell && (
-              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-                className="border border-zinc-800 rounded-2xl p-5 space-y-4 bg-zinc-900/20">
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="border border-zinc-800 rounded-2xl p-5 space-y-4 bg-zinc-900/20"
+              >
                 <div className="flex items-center justify-between">
-                  <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">Sell</p>
+                  <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">
+                    Sell
+                  </p>
                   <span className="text-[10px] text-zinc-600">
-                    Balance: <span className="text-zinc-400">{myTokens} {launch.ticker}</span>
+                    Balance:{" "}
+                    <span className="text-zinc-400">
+                      {myTokens} {launch.ticker}
+                    </span>
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <div className="relative flex-1">
-                    <input type="number" placeholder="0.00" value={sellAmount} onChange={(e) => setSellAmount(e.target.value)}
-                      className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3 text-lg font-bold outline-none focus:border-violet-500/50 transition-colors pr-14" />
-                    <button onClick={() => setSellAmount(myTokens)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-bold text-violet-500 hover:text-violet-400 tracking-wider">
+                    <input
+                      type="number"
+                      placeholder="0.00"
+                      value={sellAmount}
+                      onChange={(e) => setSellAmount(e.target.value)}
+                      className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3 text-lg font-bold outline-none focus:border-violet-500/50 transition-colors pr-14"
+                    />
+                    <button
+                      onClick={() => setSellAmount(myTokens)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-bold text-violet-500 hover:text-violet-400 tracking-wider"
+                    >
                       MAX
                     </button>
                   </div>
-                  <span className="flex items-center text-zinc-500 text-sm font-bold px-1">{launch.ticker}</span>
+                  <span className="flex items-center text-zinc-500 text-sm font-bold px-1">
+                    {launch.ticker}
+                  </span>
                 </div>
-                <button onClick={handleSell}
-                  disabled={txLoading || !sellAmount || parseFloat(sellAmount) <= 0 || parseFloat(sellAmount) > parseFloat(myTokens)}
-                  className="w-full py-3.5 rounded-xl border border-zinc-700 hover:bg-white/5 text-zinc-300 font-black tracking-widest uppercase text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.98] flex items-center justify-center gap-2">
-                  {txLoading ? (<><RotateCcw size={15} className="animate-spin" /> Broadcasting…</>) : (<>Sell {launch.ticker}</>)}
+                <button
+                  onClick={handleSell}
+                  disabled={
+                    txLoading ||
+                    !sellAmount ||
+                    parseFloat(sellAmount) <= 0 ||
+                    parseFloat(sellAmount) > parseFloat(myTokens)
+                  }
+                  className="w-full py-3.5 rounded-xl border border-zinc-700 hover:bg-white/5 text-zinc-300 font-black tracking-widest uppercase text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.98] flex items-center justify-center gap-2"
+                >
+                  {txLoading ? (
+                    <>
+                      <RotateCcw size={15} className="animate-spin" />{" "}
+                      Broadcasting…
+                    </>
+                  ) : (
+                    <>Sell {launch.ticker}</>
+                  )}
                 </button>
               </motion.div>
             )}
 
             {!isConnected && state === 0 && (
               <div className="border border-dashed border-zinc-800 rounded-2xl p-6 text-center space-y-2">
-                <p className="text-zinc-500 text-sm">Connect your wallet to participate</p>
+                <p className="text-zinc-500 text-sm">
+                  Connect your wallet to participate
+                </p>
               </div>
             )}
 
             {/* Timeline — collapsed to 2 real phases */}
             <div className="border border-zinc-800 rounded-2xl p-5 bg-zinc-900/20">
-              <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest mb-5">Curve Timeline</p>
+              <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest mb-5">
+                Curve Timeline
+              </p>
               <div>
-                <TimelineStep title="Bonding curve live" desc="Buy/sell against the curve" active={state === 0} done={(state ?? -1) >= 0} />
-                <TimelineStep title="Migration" desc={state === 1 ? "Liquidity migrated to AMM pair" : "Triggers automatically at migration threshold"} active={state === 1} done={state === 1} />
+                <TimelineStep
+                  title="Bonding curve live"
+                  desc="Buy/sell against the curve"
+                  active={state === 0}
+                  done={(state ?? -1) >= 0}
+                />
+                <TimelineStep
+                  title="Migration"
+                  desc={
+                    state === 1
+                      ? "Liquidity migrated to AMM pair"
+                      : "Triggers automatically at migration threshold"
+                  }
+                  active={state === 1}
+                  done={state === 1}
+                />
               </div>
             </div>
 
             <div className="border border-zinc-800/50 rounded-2xl p-5 space-y-3">
-              <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">Contracts</p>
-              {[{ label: "Launchpad", addr: launch.launchpadId }, { label: "Token", addr: launch.tokenId }].map(({ label, addr }) => (
+              <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">
+                Contracts
+              </p>
+              {[
+                { label: "Launchpad", addr: launch.launchpadId },
+                { label: "Token", addr: launch.tokenId },
+              ].map(({ label, addr }) => (
                 <div key={label} className="flex items-center justify-between">
-                  <span className="text-[10px] text-zinc-600 uppercase tracking-wider">{label}</span>
-                  <a href={`${explorerBase}/address/${addr}`} target="_blank" rel="noopener noreferrer"
-                    className="text-[10px] font-mono text-zinc-500 hover:text-violet-400 transition-colors flex items-center gap-1">
+                  <span className="text-[10px] text-zinc-600 uppercase tracking-wider">
+                    {label}
+                  </span>
+                  <a
+                    href={`${explorerBase}/address/${addr}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[10px] font-mono text-zinc-500 hover:text-violet-400 transition-colors flex items-center gap-1"
+                  >
                     {fmtAddr(addr)}
                     <ExternalLink size={10} />
                   </a>
@@ -455,23 +675,38 @@ export default function LaunchDetailPage() {
 
       <AnimatePresence>
         {txStatus && (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95 }}
             className={`fixed bottom-28 left-1/2 -translate-x-1/2 w-full max-w-sm mx-4 p-4 rounded-2xl flex items-center justify-between gap-4 border z-50 backdrop-blur
-              ${txStatus.type === "success" ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
-                : txStatus.type === "error" ? "bg-rose-500/10 border-rose-500/20 text-rose-400"
-                : "bg-violet-500/10 border-violet-500/20 text-violet-400"}`}>
+              ${
+                txStatus.type === "success"
+                  ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+                  : txStatus.type === "error"
+                  ? "bg-rose-500/10 border-rose-500/20 text-rose-400"
+                  : "bg-violet-500/10 border-violet-500/20 text-violet-400"
+              }`}
+          >
             <div className="flex items-center gap-3 font-bold text-sm">
               <AlertCircle size={15} />
               <span className="text-xs">{txStatus.msg}</span>
             </div>
             <div className="flex items-center gap-2 shrink-0">
               {txStatus.hash && (
-                <a href={`${explorerBase}/tx/${txStatus.hash}`} target="_blank" rel="noopener noreferrer"
-                  className="p-1.5 hover:bg-white/10 rounded-lg transition-colors">
+                <a
+                  href={`${explorerBase}/tx/${txStatus.hash}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-1.5 hover:bg-white/10 rounded-lg transition-colors"
+                >
                   <ExternalLink size={13} />
                 </a>
               )}
-              <button onClick={() => setTxStatus(null)} className="p-1.5 hover:bg-white/10 rounded-lg transition-colors text-zinc-500">
+              <button
+                onClick={() => setTxStatus(null)}
+                className="p-1.5 hover:bg-white/10 rounded-lg transition-colors text-zinc-500"
+              >
                 <X size={13} />
               </button>
             </div>
