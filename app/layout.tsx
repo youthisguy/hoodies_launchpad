@@ -6,7 +6,7 @@ import { Analytics } from "@vercel/analytics/next";
 import Script from "next/script";
 
 export const metadata: Metadata = {
-  title: "RAVEN LAUNCHPAD",
+  title: "HOODIE LAUNCHPAD",
   description: "token launchpad on Stellar Soroban",
 };
 
@@ -35,22 +35,11 @@ export default function RootLayout({
                 <div className="flex items-center gap-3">
                   {/* Logo image */}
                   <img
-                    src="/Raven-logo.png"
-                    alt="Raven"
+                    src="/mascotgreen.png"
+                    alt="HOODIE"
                     className="h-10 w-10 object-contain"
                   />
-
-                  {/* Wordmark */}
-                  <span
-                    className="text-white text-xl tracking-wide"
-                    style={{
-                      fontFamily: "'Rajdhani', sans-serif",
-                      fontWeight: 700,
-                      letterSpacing: "0.08em",
-                    }}
-                  >
-                    RAVEN
-                  </span>
+ 
                 </div>
 
                 {/* Right side — network pill + wallet */}
