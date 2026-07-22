@@ -7,7 +7,7 @@ import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "HOODIE LAUNCHPAD",
-  description: "token launchpad on Stellar Soroban",
+  description: "Hoodie token launchpad",
 };
 
 export default function RootLayout({

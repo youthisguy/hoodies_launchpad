@@ -81,7 +81,11 @@ function MascotScatter({ row, prefix }: any) {
 
 <div
   className="w-full relative overflow-hidden border-t-2 border-b-2 border-zinc-900"
-  style={{ background: "#ECE3CD" }}
+  style={{
+    background: "#ECE3CD",
+    backgroundImage:
+      "repeating-linear-gradient(45deg, rgba(46,43,50,0.06) 0px, rgba(46,43,50,0.06) 1px, transparent 1px, transparent 12px)",
+  }}
 >
   <section className="relative z-10 max-w-5xl mx-auto px-4 pt-16 pb-20 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
     <div className="flex items-center gap-5">
@@ -116,7 +120,7 @@ function MascotScatter({ row, prefix }: any) {
     >
       <PlusCircle size={13} className="md:hidden" />
       <PlusCircle size={15} className="hidden md:block" />
-      Add Project
+      Launch
     </button>
   </section>
 </div>

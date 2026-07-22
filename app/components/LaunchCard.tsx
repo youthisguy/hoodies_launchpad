@@ -188,7 +188,7 @@ export default function LaunchCard({
             className={`shrink-0 flex items-center gap-1 text-[10px] font-bold px-2.5 py-1 rounded-full border tracking-widest ${status.color}`}
           >
             {status.icon}
-            {status.label}
+ 
           </span>
         ) : (
           <span className="shrink-0 h-6 w-16 rounded-full bg-zinc-200 animate-pulse" />
@@ -220,17 +220,10 @@ export default function LaunchCard({
 
       {/* ── Row 4: liquidity + offered ── */}
       <div className="grid grid-cols-2 gap-2 text-[11px]">
-        <div className="flex items-center gap-1.5 text-zinc-600">
-          <Droplets size={11} className="text-[#7a9a0a]" />
-          <span>Liquidity:</span>
-          <span className="text-zinc-900 font-bold ml-auto">
-            {launch.liquidity}%
-          </span>
-        </div>
-        <div className="flex items-center gap-1.5 text-zinc-600">
+        <div className="flex items-center gap-1.5 w-full text-zinc-600">
           <Package size={11} className="text-[#7a9a0a]" />
-          <span>Offered:</span>
-          <span className="text-zinc-900 font-bold ml-auto truncate">
+          <span className="text-nowrap">Total Supply:</span>
+          <span className="text-zinc-900 text-nowrap font-bold ml-auto">
             {launch.offered}
           </span>
         </div>

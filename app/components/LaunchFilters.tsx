@@ -49,7 +49,7 @@ export default function LaunchFilters({
             className={`px-4 py-1.5 rounded-full text-[11px] font-bold tracking-widest uppercase border transition-all
               ${
                 status === opt.value
-                  ? "bg-[#524981] border-violet-500 text-white"
+                  ? "bg-[#CAF50E] border-[#CAF50E]/50 text-black"
                   : "bg-zinc-900 border-zinc-800 text-zinc-500 hover:border-zinc-600 hover:text-zinc-300"
               }`}
           >
@@ -69,7 +69,7 @@ export default function LaunchFilters({
         <div className="relative flex-1">
           <Search
             size={14}
-            className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-600 pointer-events-none"
+            className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white pointer-events-none"
           />
           <input
             type="text"
@@ -77,7 +77,7 @@ export default function LaunchFilters({
             value={search}
             onChange={(e) => onSearch(e.target.value)}
             className="w-full bg-zinc-900/60 border border-zinc-800 rounded-xl pl-9 pr-4 py-2.5
-                       text-sm text-zinc-300 placeholder:text-zinc-600
+                       text-sm text-zinc-300 placeholder:text-white-600
                        outline-none focus:border-violet-500/50 transition-colors"
           />
         </div>
