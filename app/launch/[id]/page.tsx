@@ -331,7 +331,7 @@ export default function LaunchDetailPage() {
 
   const metaRows = [
     {
-      label: "Launchpad Address",
+      label: "Launcher Address",
       value: launch.launchpadId,
       copyable: true,
       link: `${explorerBase}/address/${launch.launchpadId}`,

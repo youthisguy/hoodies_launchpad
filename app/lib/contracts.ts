@@ -401,9 +401,427 @@ export const LAUNCHPAD_ABI = [
     }
   ] as const;
 
-  export const TOKEN_LAUNCHER_ADDRESS: Address = "0x347434e6E53948d150C703d3D935d38AE0E75459";
+export const FACTORY_ABI = [
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "hoodie_",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "router_",
+				"type": "address"
+			},
+			{
+				"internalType": "uint16",
+				"name": "globalMaxFeeBps_",
+				"type": "uint16"
+			},
+			{
+				"internalType": "uint16",
+				"name": "globalMaxCreatorAllocationBps_",
+				"type": "uint16"
+			},
+			{
+				"internalType": "address",
+				"name": "initialOwner",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [],
+		"name": "FailedDeployment",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "balance",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "needed",
+				"type": "uint256"
+			}
+		],
+		"name": "InsufficientBalance",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			}
+		],
+		"name": "OwnableInvalidOwner",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "OwnableUnauthorizedAccount",
+		"type": "error"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint16",
+				"name": "globalMaxFeeBps",
+				"type": "uint16"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint16",
+				"name": "globalMaxCreatorAllocationBps",
+				"type": "uint16"
+			}
+		],
+		"name": "GlobalCapsUpdated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "operator",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "launcher",
+				"type": "address"
+			}
+		],
+		"name": "LauncherCreated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "previousOwner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "OwnershipTransferred",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "router",
+				"type": "address"
+			}
+		],
+		"name": "RouterUpdated",
+		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "HOODIE",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "allLaunchers",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "feeRecipient",
+				"type": "address"
+			},
+			{
+				"internalType": "uint16",
+				"name": "feeBps",
+				"type": "uint16"
+			},
+			{
+				"internalType": "uint16",
+				"name": "maxCreatorAllocationBps",
+				"type": "uint16"
+			},
+			{
+				"internalType": "uint64",
+				"name": "creatorVestingDuration",
+				"type": "uint64"
+			},
+			{
+				"components": [
+					{
+						"internalType": "uint128",
+						"name": "virtualTokenReserveBuffer",
+						"type": "uint128"
+					},
+					{
+						"internalType": "uint128",
+						"name": "virtualHoodieReserves",
+						"type": "uint128"
+					},
+					{
+						"internalType": "uint128",
+						"name": "migrationThreshold",
+						"type": "uint128"
+					}
+				],
+				"internalType": "struct TokenLauncher.LaunchDefaults",
+				"name": "defaults",
+				"type": "tuple"
+			}
+		],
+		"name": "createLauncher",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "launcher",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "operator",
+				"type": "address"
+			}
+		],
+		"name": "getLaunchersByOperator",
+		"outputs": [
+			{
+				"internalType": "address[]",
+				"name": "",
+				"type": "address[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "globalMaxCreatorAllocationBps",
+		"outputs": [
+			{
+				"internalType": "uint16",
+				"name": "",
+				"type": "uint16"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "globalMaxFeeBps",
+		"outputs": [
+			{
+				"internalType": "uint16",
+				"name": "",
+				"type": "uint16"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "launcherImplementation",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "launchersByOperator",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "launchpadImplementation",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "router",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint16",
+				"name": "newMaxFeeBps",
+				"type": "uint16"
+			},
+			{
+				"internalType": "uint16",
+				"name": "newMaxCreatorAllocationBps",
+				"type": "uint16"
+			}
+		],
+		"name": "setGlobalCaps",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "newRouter",
+				"type": "address"
+			}
+		],
+		"name": "setRouter",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "totalLaunchers",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]
 
-  export const TOKEN_LAUNCHER_ABI = [
+export const TOKEN_LAUNCHER_ABI = [
     { inputs: [], name: "FailedDeployment", type: "error" },
     {
       inputs: [

@@ -2,7 +2,7 @@
 
 import { Search, SlidersHorizontal } from "lucide-react";
 
-export type FilterStatus = "all" | "live" | "success" | "ended";
+export type FilterStatus = "all" | "live" | "graduated" | "ended";
 export type SortKey = "default" | "progress" | "cap_asc" | "cap_desc";
 
 interface LaunchFiltersProps {
@@ -18,7 +18,7 @@ interface LaunchFiltersProps {
 const STATUS_OPTIONS: { value: FilterStatus; label: string }[] = [
   { value: "all", label: "All" },
   { value: "live", label: "Live" },
-  { value: "success", label: "Success" },
+  { value: "graduated", label: "Graduated" },
   { value: "ended", label: "Ended" },
 ];
 

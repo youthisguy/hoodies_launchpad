@@ -115,8 +115,7 @@ export default function Home() {
                 Hoodie <span className="text-[#7a9a0a]">Launchpad</span>
               </h1>
               <p className="text-zinc-600 mt-1.5 sm:mt-2 text-sm sm:text-sm leading-snug">
-                Launch, Discover and Participate in new token launches on Hoodie
-                Token Launcher Launcher.
+                Launch, Discover and Participate in new token launches in the hood
               </p>
             </div>
           </div>
